@@ -1,0 +1,63 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def read_csv(file_path):
+    return pd.read_csv(file_path)
+
+def basic_stats(data):
+    # Calculate mean, median, mode, standard deviation, and correlation coefficient
+    mean = data.mean()
+    median = data.median()
+    mode = data.mode().iloc[0]
+    std_dev = data.std()
+    correlation = data.corr()
+
+    return mean, median, mode, std_dev, correlation
+
+def generate_plots(data):
+    # Generate histograms, scatter plots, and line plots
+    sns.set(style="whitegrid")
+
+    # Histogram
+    plt.figure(figsize=(12, 6))
+    for column in data.columns:
+        sns.histplot(data[column], kde=False, label=column)
+    plt.title('Histograms')
+    plt.legend()
+    plt.show()
+
+    # Scatter Plot
+    plt.figure(figsize=(12, 6))
+    sns.pairplot(data, kind='scatter')
+    plt.title('Scatter Plot')
+    plt.show()
+
+    # Line Plot (assuming a time series data with a numeric index)
+    if isinstance(data.index, pd.DatetimeIndex):
+        plt.figure(figsize=(12, 6))
+        sns.lineplot(data=data)
+        plt.title('Line Plot')
+        plt.show()
+
+def main(file_path):
+    # Read CSV file
+    data = read_csv(file_path)
+
+    # Perform basic statistical analysis
+    mean, median, mode, std_dev, correlation = basic_stats(data)
+
+    # Display the results
+    print("Mean:\n", mean)
+    print("\nMedian:\n", median)
+    print("\nMode:\n", mode)
+    print("\nStandard Deviation:\n", std_dev)
+    print("\nCorrelation Coefficient:\n", correlation)
+
+    # Generate plots
+    generate_plots(data)
+
+if _name_ == "_main_":
+    # Example usage
+    file_path = "your_file.csv"
+    main(file_path)
